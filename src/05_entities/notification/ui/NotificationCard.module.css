@@ -1,0 +1,20 @@
+.cardWrapper{
+    margin: 0;
+    width: 316px;
+    height: 90px;
+    padding: 12px;
+    gap:12px;
+    border-radius: 5px;
+    border: 1px solid var(--color-gray) ;
+    box-sizing: border-box;
+}
+
+.cardHeader{
+    width: 292px;
+    height: 42px;
+}
+
+.cardInfoSlot {
+    width: 292px;
+    height: 16px;
+}

@@ -1,0 +1,21 @@
+.root {
+  border: 1px solid var(--color-gray);
+  border-radius: 3px;
+  padding: 0 5px;
+  font-size: 18px;
+}
+
+.root:focus {
+  outline: none;
+}
+
+.input_text {
+  height: 35px;
+  width: 450px;
+}
+
+.textArea_text {
+  resize: none;
+  height: 240px;
+  width: 450px
+}

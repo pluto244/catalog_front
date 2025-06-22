@@ -1,0 +1,10 @@
+.root {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  align-items: center;
+}
+
+.profile_title {
+  font-size: 48px;
+}

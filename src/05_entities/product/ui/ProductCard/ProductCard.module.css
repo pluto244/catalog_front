@@ -1,0 +1,51 @@
+.root {
+    width: 304px;
+    height: 168px;
+
+}
+
+.link {
+    display: block;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.link:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.productCard {
+    margin: 0;
+    width: 316px;
+    min-height: 180px;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid var(--color-gray) ;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.productHeaderSlot{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.productHeader {
+   flex-grow: 1;
+}
+
+.productFeature {
+    flex-shrink: 0;
+}
+.productDescriptionSlot {
+    flex-grow: 1;
+}
+
+.productInfoSlot {
+    min-height: 16px;
+}

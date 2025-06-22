@@ -1,0 +1,19 @@
+:root {
+    --text-color: #000;
+    --link-color: #00aae6;
+    --link-colorPressed: #005aae;
+    --link-colorDisabled: #8fdefb;
+
+    --background-color: #fff;
+    --primary-color: #88F657;
+    --primary-colorPressed: #40CD00;
+  
+    --color-white: #fff;
+    --color-black: #000;
+    --color-gray: #B5B5B5;
+    --color-red: #FF2969;
+    --color-orange: #F6C033;
+    
+}
+
+

@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "ProductId": 101,
+    "ProductName": "Облачное хранилище FastDrive",
+    "message": "PRODUCT_WAS_PUBLISHED"
+  },
+  {
+    "id": 2,
+    "ProductId": 102,
+    "ProductName": "TaskMaster",
+    "message": "PRODUCT_ON_MODERATION_WAS_EDITED"
+  },
+  {
+    "id": 3,
+    "ProductId": 103,
+    "ProductName": "Кибербезопасность SecureShield",
+    "message": "PRODUCT_WAS_DECLINED_OF_MODERATION"
+  }
+]

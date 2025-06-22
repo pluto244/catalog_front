@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "name": "Росошанский Егор",
+    "email": "frontend2@iWantInT1.ru",
+    "idOfFollowedProductsList": [101, 102, 103],
+    "role": "ROLE_USER"
+  },
+  {
+    "id": 2,
+    "name": "Варвара Цыганкова",
+    "email": "frontend2@iWantInT1.ru",
+    "idOfFollowedProductsList": [104, 105],
+    "role": "ROLE_USER"
+  },
+  {
+    "id": 3,
+    "name": "Иван Смирнов",
+    "email": "ivan.smirnov@example.com",
+    "idOfFollowedProductsList": [101, 106],
+    "role": "ROLE_USER"
+  },
+  {
+    "id": 4,
+    "name": "Екатерина Сидорова",
+    "email": "ekaterina.sidorova@example.com",
+    "idOfFollowedProductsList": [107],
+    "role": "ROLE_USER"
+  },
+  {
+    "id": 5,
+    "name": "Дмитрий Козлов",
+    "email": "dmitry.kozlov@example.com",
+    "idOfFollowedProductsList": [103, 108, 109],
+    "role": "ROLE_USER"
+  }
+]

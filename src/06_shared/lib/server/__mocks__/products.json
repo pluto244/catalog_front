@@ -1,0 +1,110 @@
+[
+  {
+    "id": 101,
+    "ownerId": 1,
+    "title": "Облачное хранилище FastDrive",
+    "nameOfOwner": "Росошанский Егор",
+    "description": "Быстрое и безопасное облачное хранилище с поддержкой шифрования и интеграцией с популярными офисными приложениями.",
+    "category": "Хранение данных",
+    "status": "APPROVED",
+    "timeOfLastApproval": "2024-08-20T12:34:56Z",
+    "emailOfSupport": "support@fastdrive.com",
+    "linkToWebSite": "https://fastdrive.com"
+  },
+  {
+    "id": 102,
+    "ownerId": 1,
+    "title": "TaskMaster",
+    "nameOfOwner": "Росошанский Егор",
+    "description": "Приложение для управления проектами с функцией отслеживания задач и автоматической генерацией отчетов.",
+    "category": "Управление проектами",
+    "status": "ON_MODERATION",
+    "timeOfLastApproval": "2024-08-21T09:22:33Z",
+    "emailOfSupport": "support@taskmaster.com",
+    "linkToWebSite": "https://taskmaster.com"
+  },
+  {
+    "id": 103,
+    "ownerId": 1,
+    "title": "Кибербезопасность SecureShield",
+    "nameOfOwner": "Росошанский Егор",
+    "description": "Комплексный пакет для обеспечения кибербезопасности, включающий антивирус, файрвол и защиту от фишинга.",
+    "category": "Кибербезопасность",
+    "status": "MODERATION_DENIED",
+    "timeOfLastApproval": "2024-08-18T15:45:00Z",
+    "emailOfSupport": "support@secureshield.com",
+    "linkToWebSite": "https://secureshield.com"
+  },
+  {
+    "id": 104,
+    "ownerId": 2,
+    "title": "Аналитика данных DataVision",
+    "nameOfOwner": "Вероника Цыганкова",
+    "description": "Платформа для обработки и визуализации данных с поддержкой машинного обучения и интеграцией с популярными БД.",
+    "category": "Аналитика",
+    "status": "MODERATION_DENIED",
+    "timeOfLastApproval": "2024-08-19T10:15:30Z",
+    "emailOfSupport": "support@datavision.com",
+    "linkToWebSite": "https://datavision.com"
+  },
+  {
+    "id": 105,
+    "ownerId": 2,
+    "title": "WebDev Framework",
+    "nameOfOwner": "Вероника Цыганкова",
+    "description": "Фреймворк для разработки современных веб-приложений с поддержкой TypeScript и микросервисной архитектуры.",
+    "category": "Разработка ПО",
+    "status": "APPROVED",
+    "timeOfLastApproval": "2024-08-20T12:00:00Z",
+    "emailOfSupport": "support@webdevframework.com",
+    "linkToWebSite": "https://webdevframework.com"
+  },
+  {
+    "id": 106,
+    "ownerId": 3,
+    "title": "Видеоконференции MeetPro",
+    "nameOfOwner": "Иван Смирнов",
+    "description": "Решение для видеоконференций с поддержкой до 1000 участников, записью встреч и встроенным чатботом.",
+    "category": "Коммуникации",
+    "status": "APPROVED",
+    "timeOfLastApproval": "2024-08-21T09:00:00Z",
+    "emailOfSupport": "support@meetpro.com",
+    "linkToWebSite": "https://meetpro.com"
+  },
+  {
+    "id": 107,
+    "ownerId": 4,
+    "title": "CRM система SalesBoost",
+    "nameOfOwner": "Екатерина Сидорова",
+    "description": "Мощная CRM-система для автоматизации продаж, отслеживания клиентов и интеграции с социальными сетями.",
+    "category": "Управление продажами",
+    "status": "ARCHIVED",
+    "timeOfLastApproval": "2024-08-18T14:30:00Z",
+    "emailOfSupport": "support@salesboost.com",
+    "linkToWebSite": "https://salesboost.com"
+  },
+  {
+    "id": 108,
+    "ownerId": 5,
+    "title": "Электронный документооборот DocuFlow",
+    "nameOfOwner": "Дмитрий Козлов",
+    "description": "Сервис для электронного документооборота с поддержкой цифровой подписи и интеграцией с 1С.",
+    "category": "Документооборот",
+    "status": "MODERATION_DENIED",
+    "timeOfLastApproval": "2024-08-19T11:45:00Z",
+    "emailOfSupport": "support@docuflow.com",
+    "linkToWebSite": "https://docuflow.com"
+  },
+  {
+    "id": 109,
+    "ownerId": 5,
+    "title": "E-commerce платформа MarketZone",
+    "nameOfOwner": "Дмитрий Козлов",
+    "description": "Платформа для создания интернет-магазинов с поддержкой многоканальных продаж и аналитики.",
+    "category": "Электронная коммерция",
+    "status": "APPROVED",
+    "timeOfLastApproval": "2024-08-20T13:15:00Z",
+    "emailOfSupport": "support@marketzone.com",
+    "linkToWebSite": "https://marketzone.com"
+  }
+]

@@ -1,0 +1,12 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; 
+  margin-bottom: 30px;
+}
+
+.label_name {
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 28px;
+}

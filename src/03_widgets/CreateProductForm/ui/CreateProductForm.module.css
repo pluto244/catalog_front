@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  gap: 60px
+}
+
+.field_error {
+  margin-bottom: 10px;
+  color: var(--color-red);
+  height: 25px;
+}
