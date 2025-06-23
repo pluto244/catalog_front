@@ -38,7 +38,7 @@ export function ProfilePage() {
       {isModalOpen && (
         <Modal 
           type={modalProps.type}
-          onClose={navigateAndClose}
+          onClose={() => navigateAndClose()}
           buttonText={modalProps.buttonText}
         >
           <h3>{modalProps.content}</h3>

@@ -18,10 +18,7 @@ export function NotificationList(props: NotificationCardListType) {
             {notifications.map(notification => (
                 <NotificationCard
                     key={notification.id}
-                    id={notification.id}
-                    ProductId={notification.ProductId}
-                    ProductName={notification.ProductName}
-                    message={notification.message}
+                    {...notification}
                 />
             ))}
         </div>

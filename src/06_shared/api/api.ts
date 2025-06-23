@@ -67,7 +67,7 @@ export type EditProductBodyRequest = {
 
 export const api = createApi({
     reducerPath: 'api',
-    tagTypes: ['FollowedProducts'],
+    tagTypes: ['FollowedProducts', 'Products'],
     baseQuery: fetchBaseQuery({
         baseUrl: '/api',
     }),
@@ -92,18 +92,29 @@ export const api = createApi({
         }),
         getAllProducts: builder.query<ProductPreviewCardDto[], void>({
             query: () => '/products/all_approved',
+            providesTags: (result) =>
+                result
+                    ? [
+                          ...result.map(({ id }) => ({ type: 'Products' as const, id })),
+                          { type: 'Products', id: 'LIST' },
+                      ]
+                    : [{ type: 'Products', id: 'LIST' }],
         }),
         getProductById: builder.query<ProductDto, number>({
             query: (id) => `/products/${id}`,
+            providesTags: (result, error, id) => [{ type: 'Products', id }],
         }),
         searchProductsByTitle: builder.query<ProductPreviewCardDto[], string>({
             query: (title) => `/products/all_approved/title?title=${encodeURIComponent(title)}`,
+            providesTags: [{ type: 'Products', id: 'LIST' }],
         }),
         searchProductsByCategory: builder.query<ProductPreviewCardDto[], string>({
             query: (category) => `/products/all_approved/category?category=${encodeURIComponent(category)}`,
+            providesTags: [{ type: 'Products', id: 'LIST' }],
         }),
         searchProductsByTitleAndCategory: builder.query<ProductPreviewCardDto[], { title: string; category: string }>({
             query: ({ title, category }) => `/products/all_approved/title_and_category?title=${encodeURIComponent(title)}&category=${encodeURIComponent(category)}`,
+            providesTags: [{ type: 'Products', id: 'LIST' }],
         }),
         addProduct: builder.mutation<ProductDto, AddProductBodyRequest>({
             query: (product) => ({
@@ -111,6 +122,7 @@ export const api = createApi({
                 method: 'POST',
                 body: product,
             }),
+            invalidatesTags: [{ type: 'Products', id: 'LIST' }],
         }),
         editProduct: builder.mutation<ProductDto, EditProductBodyRequest>({
             query: (product) => ({
@@ -118,27 +130,53 @@ export const api = createApi({
                 method: 'PUT',
                 body: product,
             }),
+            invalidatesTags: (result, error, { id }) => [{ type: 'Products', id }, {type: 'Products', id: 'LIST'}],
         }),
         getUserProductsByStatus: builder.query<ProductPreviewCardDto[], { userId: number, status: Status }>({
             query: ({ userId, status }) => `/products/${userId}/status?status=${status}`,
+            providesTags: (result) =>
+            result
+                ? [
+                      ...result.map(({ id }) => ({ type: 'Products' as const, id })),
+                      { type: 'Products', id: 'LIST' },
+                  ]
+                : [{ type: 'Products', id: 'LIST' }],
         }),
         archiveProduct: builder.mutation<number, number>({
             query: (id) => ({
                 url: `/products/archive/${id}`,
                 method: 'POST',
             }),
+            invalidatesTags: [{ type: 'Products', id: 'LIST' }],
         }),
         unarchiveProduct: builder.mutation<number, number>({
             query: (id) => ({
                 url: `/products/unarchive/${id}`,
                 method: 'POST',
             }),
+            invalidatesTags: [{ type: 'Products', id: 'LIST' }],
         }),
         deleteProduct: builder.mutation<void, number>({
             query: (id) => ({
                 url: `/products/${id}`,
                 method: 'DELETE',
             }),
+            invalidatesTags: [{ type: 'Products', id: 'LIST' }],
+        }),
+        approveProduct: builder.mutation<ProductDto, number>({
+            query: (id) => ({
+                url: `/products/approve/${id}`,
+                method: 'POST',
+            }),
+            invalidatesTags: (result, error, id) => [{ type: 'Products', id }, { type: 'Products', id: 'LIST' }],
+        }),
+        rejectProduct: builder.mutation<ProductDto, { id: number; reason: string }>({
+            query: ({ id, reason }) => ({
+                url: `/products/reject/${id}`,
+                method: 'POST',
+                body: { reason },
+            }),
+            invalidatesTags: (result, error, { id }) => [{ type: 'Products', id }, { type: 'Products', id: 'LIST' }],
         }),
         subscribeToProduct: builder.mutation<IdsOfFollowedProductsDto, number>({
             query: (id) => ({
@@ -198,7 +236,7 @@ export const api = createApi({
             }),
         }),
         getNotifications: builder.query<NotificationDto[], number>({
-            query: (userId) => `/notifications/all/${userId}`,
+            query: (userId) => `/notifications/user/${userId}`,
         }),
     }),
 });
@@ -222,6 +260,8 @@ export const {
     useArchiveProductMutation,
     useUnarchiveProductMutation,
     useDeleteProductMutation,
+    useApproveProductMutation,
+    useRejectProductMutation,
     useSubscribeToProductMutation,
     useUnsubscribeFromProductMutation,
     useGetFollowedProductsQuery,

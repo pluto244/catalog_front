@@ -26,18 +26,26 @@ export const ProfileCategory: React.FC = () => {
 
     const [currentCategory, setCurrentCategory] = useState<ProductCategory>(categoriesToShow[0]);
 
-    const { isLoading, productResults, notificationResults } = useProfileCategoryData(
+    const { isLoading, productResults, notificationResults, refetch } = useProfileCategoryData(
         currentCategory,
         parsedProfileId,
         currentUserId
     );
+
+    const handleCategoryChange = (category: ProductCategory) => {
+        if (category === currentCategory) {
+            refetch();
+        } else {
+            setCurrentCategory(category);
+        }
+    };
 
     return (
         <>
             <ProductFilterButtonsProfile
                 currentCategory={currentCategory}
                 categories={categoriesToShow}
-                onCategoryChange={setCurrentCategory}
+                onCategoryChange={handleCategoryChange}
             />
             {isLoading ? <Loader/> :
                 <Products

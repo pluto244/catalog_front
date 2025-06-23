@@ -37,7 +37,7 @@ export const ProductPage = () => {
       {isModalOpen && (
         <Modal 
           type={modalProps.type}
-          onClose={navigateAndClose}
+          onClose={() => navigateAndClose()}
           buttonText={modalProps.buttonText}
         >
           <h3>{modalProps.content}</h3>

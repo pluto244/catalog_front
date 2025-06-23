@@ -11,6 +11,7 @@ type Props = {
   type?: InputHTMLAttributes<HTMLInputElement>['type']
   id?: string
   placeholder?: string
+  onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 
 export const Input = ({ 
@@ -20,7 +21,9 @@ export const Input = ({
   register, 
   type,
   placeholder,
-  id }: Props) => {
+  id,
+  onChange
+}: Props) => {
   return inputStyle === 'description' ? (
     <textarea
       {...register}
@@ -29,6 +32,7 @@ export const Input = ({
       value={value}
       id={id}
       placeholder={placeholder}
+      onChange={onChange}
     />
   ) : (
     <input
@@ -39,6 +43,7 @@ export const Input = ({
       value={value}
       id={id}
       placeholder={placeholder}
+      onChange={onChange}
     />
   );
 }

@@ -180,7 +180,7 @@ export const CreateProductForm = ({productId, formMode} : Props) => {
         {isModalOpen && (
             <Modal 
                 type={modalProps.type}
-                onClose={navigateAndClose}
+                onClose={() => navigateAndClose()}
                 buttonText={modalProps.buttonText}
             >
                 <h3>{modalProps.content}</h3>

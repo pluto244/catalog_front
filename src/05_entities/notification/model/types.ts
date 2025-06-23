@@ -1,10 +1,11 @@
-
-
 export interface NotificationDto {
     id: number;
-    ProductId: number;
-    ProductName: string;
-    message: NotificationMessage;
+    userId: number;
+    productId: number;
+    titleOfProduct: string;
+    descriptionOfProduct: string;
+    message: keyof typeof NotificationMessage;
+    timestamp: string;
 }
 
 

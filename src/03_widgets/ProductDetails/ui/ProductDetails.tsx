@@ -31,7 +31,7 @@ export const ProductDetails = ({ product }: Props) => {
     return (
         <Modal 
             type={modalProps.type}
-            onClose={navigateAndClose}
+            onClose={() => navigateAndClose()}
             buttonText={modalProps.buttonText}
         >
             <h3>{modalProps.content}</h3>
@@ -75,7 +75,7 @@ export const ProductDetails = ({ product }: Props) => {
       </div>
       {userRole === Roles.ROLE_USER ? 
         <UserButtons isOwner={isOwner} productId={product.id} status={product.status}/> : 
-        <AdminButtons status={product.status}/>
+        <AdminButtons status={product.status} productId={product.id}/>
       }
     </div>
   )

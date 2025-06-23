@@ -11,49 +11,69 @@ export const useProfileCategoryData = (
     profileId: number | null,
     currentUserId: number | null
 ) => {
-    const { data: userProducts, isLoading: isLoadingUserProducts } = useGetUserProductsByStatusQuery(
+    const userProductsQuery = useGetUserProductsByStatusQuery(
         { userId: profileId!, status: Status.APPROVED },
         { skip: currentCategory !== ProductCategory.UserProducts || !profileId }
     );
-    const { data: toDoProducts, isLoading: isLoadingToDo } = useGetUserProductsByStatusQuery(
+    const toDoProductsQuery = useGetUserProductsByStatusQuery(
         { userId: profileId!, status: Status.MODERATION_DENIED },
         { skip: currentCategory !== ProductCategory.ToDo || !profileId }
     );
-    const { data: archiveProducts, isLoading: isLoadingArchive } = useGetUserProductsByStatusQuery(
+    const archiveProductsQuery = useGetUserProductsByStatusQuery(
         { userId: profileId!, status: Status.ARCHIVED },
         { skip: currentCategory !== ProductCategory.Archive || !profileId }
     );
-    const { data: favoriteProducts, isLoading: isLoadingFavorites } = useGetFollowedProductsQuery(
+    const favoriteProductsQuery = useGetFollowedProductsQuery(
         currentUserId!,
         { skip: currentCategory !== ProductCategory.Favorites || !currentUserId }
     );
-    const { data: notifications, isLoading: isLoadingNotifications } = useGetNotificationsQuery(
+    const notificationsQuery = useGetNotificationsQuery(
         currentUserId!,
         { skip: currentCategory !== ProductCategory.Notifications || !currentUserId }
     );
 
-    const isLoading = isLoadingUserProducts || isLoadingToDo || isLoadingArchive || isLoadingFavorites || isLoadingNotifications;
+    const refetch = () => {
+        switch (currentCategory) {
+            case ProductCategory.UserProducts:
+                userProductsQuery.refetch();
+                break;
+            case ProductCategory.ToDo:
+                toDoProductsQuery.refetch();
+                break;
+            case ProductCategory.Archive:
+                archiveProductsQuery.refetch();
+                break;
+            case ProductCategory.Favorites:
+                favoriteProductsQuery.refetch();
+                break;
+            case ProductCategory.Notifications:
+                notificationsQuery.refetch();
+                break;
+        }
+    };
+
+    const isLoading = userProductsQuery.isLoading || toDoProductsQuery.isLoading || archiveProductsQuery.isLoading || favoriteProductsQuery.isLoading || notificationsQuery.isLoading;
 
     let products: ProductPreviewCardDto[] | undefined;
     switch (currentCategory) {
         case ProductCategory.UserProducts:
-            products = userProducts;
+            products = userProductsQuery.data;
             break;
         case ProductCategory.ToDo:
-            products = toDoProducts;
+            products = toDoProductsQuery.data;
             break;
         case ProductCategory.Archive:
-            products = archiveProducts;
+            products = archiveProductsQuery.data;
             break;
         case ProductCategory.Favorites:
-            products = favoriteProducts;
+            products = favoriteProductsQuery.data;
             break;
         default:
             products = [];
     }
     
     const productResults = products || [];
-    const notificationResults = notifications || [];
+    const notificationResults = notificationsQuery.data || [];
 
-    return { isLoading, productResults, notificationResults };
+    return { isLoading, productResults, notificationResults, refetch };
 }; 
