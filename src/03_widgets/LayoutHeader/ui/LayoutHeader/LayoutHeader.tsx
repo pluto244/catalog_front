@@ -7,11 +7,8 @@ import { RootState } from '@/01_app/AppStore'
 import { Icon} from '@/06_shared/ui/Icon/Icon';
 import { Roles } from '@/05_entities/user/api/types'
 
-
-
 export function LayoutHeader() {
-    const userId = useSelector((state: RootState) => state.session.userId);
-    const isUser = useSelector((state: RootState) => state.session.role);
+    const { userId, role, name } = useSelector((state: RootState) => state.session);
 
     return (
         <header className={css.root}>
@@ -22,13 +19,14 @@ export function LayoutHeader() {
                 </div>
             </Link>
             {
-                (isUser === Roles.ROLE_USER) &&
-                <Link to={`/profile/${userId}`}>
-                    <div className={css.right}>
-                        <span>Личный кабинет</span>
-                        <Icon type = "headerUser" className={css.icon}/>
-                    </div>
-                </Link>
+                (role === Roles.ROLE_USER) && userId && (
+                    <Link to={`/profile/${userId}`}>
+                        <div className={css.right}>
+                            <span>{name || 'Личный кабинет'}</span>
+                            <Icon type="headerUser" className={css.icon}/>
+                        </div>
+                    </Link>
+                )
             }
         </header>
     )

@@ -1,57 +1,52 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { ProductId, ProductMainPageCategory, ProductPreviewCardDto } from '@/05_entities/product/model/types';
-import { RootState } from '@/01_app/AppStore';
-import { selectProductIdsInWishlist } from '@/05_entities/wishlist';
+import { ProductId, ProductMainPageCategory } from '@/05_entities/product/model/types';
 import { AddToWishlistIcon } from '@/04_features/wishlist/addToWishlist/ui/AddToWishlistIcon/AddToWishlistIcon';
 import { ProductFilterButtons } from '@/04_features/product/ui/ProductFilterButtons';
-import { fetchSearchResults, InputSearch } from '@/04_features/search';
+import { InputSearch } from '@/04_features/search';
 import { ProductCardList } from '@/03_widgets/ProductCardList/ui/ProductCardList';
-import { filterFavoriteProducts } from './module/filterFavoriteProducts';
-
+import { useGetAllProductsQuery, useGetFollowedProductsQuery, useSearchProductsByTitleQuery } from '@/06_shared/api/api';
+import { Loader } from '@/06_shared/ui/Loader/Loader';
+import { useDebounce } from '@/06_shared/lib/useDebounce';
+import { RootState } from '@/01_app/AppStore';
 
 export const MainCategoryWidget: React.FC = () => {
-    const [products, setProducts] = useState<ProductPreviewCardDto[]>([]);
-    const [displayedProducts, setDisplayedProducts] = useState<ProductPreviewCardDto[]>([]);
+    const [searchQuery, setSearchQuery] = useState('');
     const [currentCategory, setCurrentCategory] = useState<ProductMainPageCategory>(ProductMainPageCategory.All);
-    const favoriteProductIds = useSelector(selectProductIdsInWishlist);
+    const debouncedSearchQuery = useDebounce(searchQuery, 500);
+    const currentUserId = useSelector((state: RootState) => state.session.userId);
 
-    const handleApiResponse = (data: ProductPreviewCardDto[]) => {
-        setProducts(data);
-    };
+    const isFavoritesCategory = currentCategory === ProductMainPageCategory.Favorites;
 
-    const handleCategoryChange = (category: ProductMainPageCategory) => {
-        setCurrentCategory(category);
-    };
+    const { data: allProducts, isLoading: isLoadingAll } = useGetAllProductsQuery(undefined, {
+        skip: isFavoritesCategory || !!debouncedSearchQuery
+    });
+    const { data: searchedProducts, isLoading: isLoadingSearch } = useSearchProductsByTitleQuery(debouncedSearchQuery, {
+        skip: !debouncedSearchQuery
+    });
+    const { data: followedProducts, isLoading: isLoadingFollowed } = useGetFollowedProductsQuery(currentUserId!, {
+        skip: !isFavoritesCategory || !currentUserId
+    });
+
+    const isLoading = isLoadingAll || isLoadingSearch || isLoadingFollowed;
     
-    useEffect(() => {
-        fetchSearchResults().then(setProducts);
-    }, []);
+    const products = isFavoritesCategory ? followedProducts : (debouncedSearchQuery ? searchedProducts : allProducts);
 
-    useEffect(() => {
-        let filtered = products;
-        if (currentCategory === ProductMainPageCategory.Favorites) {
-            filtered = filterFavoriteProducts(products, favoriteProductIds);
-        }
-        setDisplayedProducts(filtered);
-    }, [currentCategory, products, favoriteProductIds]);
-    
     return (
         <>
-            <InputSearch
-                onApiResponse={handleApiResponse}
-            />
+            <InputSearch onSearch={setSearchQuery} />
 
             <ProductFilterButtons
                 currentCategory={currentCategory}
                 categories={[ProductMainPageCategory.All, ProductMainPageCategory.Favorites]}
-                onCategoryChange={handleCategoryChange}
+                onCategoryChange={setCurrentCategory}
             />
-
-            <ProductCardList
-                products={displayedProducts}
-                productCardActionsSlot={(productId: ProductId) => <AddToWishlistIcon productId={productId} />}
-            />
+            {isLoading ? <Loader/> : (
+                <ProductCardList
+                    products={products || []}
+                    productCardActionsSlot={(productId: ProductId) => <AddToWishlistIcon productId={productId} />}
+                />
+            )}
         </>
     );
 };

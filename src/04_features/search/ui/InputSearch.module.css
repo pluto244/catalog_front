@@ -9,3 +9,12 @@
   border-radius: 50px;
   border: 2px solid var(--color-gray);
 }
+
+@media (max-width: 768px) {
+  .search {
+      flex-direction: column;
+      height: auto;
+      padding: 20px;
+      margin-top: 16px;
+  }
+}

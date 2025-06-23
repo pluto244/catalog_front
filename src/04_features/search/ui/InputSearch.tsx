@@ -1,5 +1,4 @@
 import css from './InputSearch.module.css';
-import { fetchSearchResults } from '../api/searchApi';
 import { InputSearchProps } from '../model/types';
 import { Button } from '@/06_shared/ui/Button/Button';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -10,7 +9,7 @@ type FormFields = {
     name: string
 }
 
-export const InputSearch = ({ onApiResponse }: InputSearchProps) => {
+export const InputSearch = ({ onSearch }: InputSearchProps) => {
     
     const {
         register, 
@@ -19,8 +18,7 @@ export const InputSearch = ({ onApiResponse }: InputSearchProps) => {
       } = useForm<FormFields>();
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
-        fetchSearchResults(data.name)
-        .then(onApiResponse)
+        onSearch(data.name)
     }
 
     return (

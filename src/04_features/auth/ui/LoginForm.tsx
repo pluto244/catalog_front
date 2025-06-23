@@ -5,7 +5,7 @@ import { Button } from '@/06_shared/ui/Button/Button';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '@/06_shared/model/hooks';
 import { setSession } from '@/05_entities/session/sessionSlice';
-import { useLoginMutation, useLazyGetMeQuery } from '@/06_shared/api/api';
+import { useLoginMutation } from '@/06_shared/api/api';
 
 type FormFields = {
   email: string
@@ -16,7 +16,6 @@ export function LoginForm() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [login] = useLoginMutation();
-  const [triggerGetMe] = useLazyGetMeQuery();
 
   const {
     register,
@@ -29,10 +28,14 @@ export function LoginForm() {
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      await login(data).unwrap();
-      const userData = await triggerGetMe().unwrap();
+      const userData = await login(data).unwrap();
       
-      dispatch(setSession({ userId: userData.id, role: userData.role }));
+      dispatch(setSession({ 
+        userId: userData.id, 
+        role: userData.role, 
+        name: userData.name,
+        followedProductIds: userData.idOfFollowedProductsList
+      }));
       navigate('/')
     } catch (error) {
       setError('root', {

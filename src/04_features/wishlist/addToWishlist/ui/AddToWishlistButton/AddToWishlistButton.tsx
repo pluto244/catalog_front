@@ -1,26 +1,37 @@
-import React, { useCallback } from 'react'
-import type { ProductId } from '@/05_entities/product'
-import { selectIsInWishlist, toggleWishlistProduct } from '@/05_entities/wishlist'
-import { useAppDispatch, useAppSelector } from '@/06_shared/model/hooks'
+import React from 'react';
+import type { ProductId } from '@/05_entities/product';
+import { useAppSelector } from '@/06_shared/model/hooks';
 import { Button } from '@/06_shared/ui/Button/Button';
+import {
+    useSubscribeToProductMutation,
+    useUnsubscribeFromProductMutation
+} from '@/06_shared/api/api';
 
 type Props = {
-    productId: ProductId
-}
+    productId: ProductId;
+};
 
 export function AddToWishlistButton({ productId }: Props) {
-    const isInWishlist = useAppSelector(state => selectIsInWishlist(state, productId));
+    const followedProductIds = useAppSelector((state) => state.session.followedProductIds) || [];
+    const isInWishlist = followedProductIds.includes(productId);
 
-    const dispatch = useAppDispatch();
+    const [subscribe, { isLoading: isSubscribing }] = useSubscribeToProductMutation();
+    const [unsubscribe, { isLoading: isUnsubscribing }] = useUnsubscribeFromProductMutation();
+    const isLoading = isSubscribing || isUnsubscribing;
 
-    const onClick = useCallback(
-        (e: React.MouseEvent<HTMLElement>) => {
-            dispatch(toggleWishlistProduct(productId));
-        },
-        [dispatch, productId],
-    );
+    const handleClick = () => {
+        if (isLoading) return;
+
+        if (isInWishlist) {
+            unsubscribe(productId);
+        } else {
+            subscribe(productId);
+        }
+    };
 
     return (
-        <Button onClick={onClick}>{isInWishlist ? 'Отписаться' : 'Подписаться'}</Button>
+        <Button onClick={handleClick} isLoading={isLoading}>
+            {isInWishlist ? 'Отписаться' : 'Подписаться'}
+        </Button>
     );
 }

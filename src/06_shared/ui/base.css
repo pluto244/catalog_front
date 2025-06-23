@@ -57,6 +57,12 @@ h1 {
     line-height: 56px;
 }
 
+@media (max-width: 768px) {
+    h1 {
+        font-size: 36px;
+        line-height: 44px;
+    }
+}
 
 .text_header {
     color: var(--text-color);

@@ -1,7 +1,43 @@
-.container {
+.pageContainer {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.pageContainer h1 {
+    margin-bottom: 32px;
+}
+
+.fieldsWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.actionsContainer {
   display: flex;
   justify-content: space-between;
-  gap: 60px
+  align-items: center;
+  gap: 20px;
+}
+
+.mainActions {
+    display: flex;
+    gap: 20px;
+}
+
+@media (max-width: 768px) {
+    .actionsContainer {
+        flex-direction: column-reverse;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .mainActions {
+        flex-direction: column;
+        gap: 16px;
+    }
 }
 
 .field_error {

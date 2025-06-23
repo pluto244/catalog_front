@@ -1,30 +1,40 @@
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
+type ModalProps = {
+    content: React.ReactNode | null,
+    type: 'success' | 'error' | null,
+    buttonText?: string,
+}
+
 export const useModal = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState<string | null>(null);
-  const [modalType, setModalType] = useState<'success' | 'error' | null>(null);
-  const navigate = useNavigate() 
+  const [modalProps, setModalProps] = useState<ModalProps>({
+      content: null,
+      type: null,
+      buttonText: 'Главный экран',
+  });
+  const navigate = useNavigate();
 
-  const openModal = useCallback((content: string | null, type: 'success' | 'error') => {
-    setModalContent(content);
-    setModalType(type);
+  const openModal = useCallback((content: React.ReactNode | null, type: 'success' | 'error', buttonText?: string) => {
+    setModalProps({ content, type, buttonText });
     setIsModalOpen(true);
   }, []);
 
   const closeModal = useCallback(() => {
     setIsModalOpen(false);
-    setModalContent(null);
-    setModalType(null);
-    navigate('/')
-  }, [navigate]);
+  }, []);
+
+  const navigateAndClose = useCallback((path: string = '/') => {
+    closeModal();
+    navigate(path);
+  }, [navigate, closeModal]);
 
   return {
     isModalOpen,
-    modalContent,
-    modalType,
+    modalProps,
     openModal,
     closeModal,
+    navigateAndClose,
   };
 };

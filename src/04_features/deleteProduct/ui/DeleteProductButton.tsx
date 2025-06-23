@@ -3,13 +3,12 @@ import { useState } from "react"
 
 type Props = {
   onClick: () => void 
+  isLoading?: boolean
 }
 
-export const DeleteProductButton = ({onClick} : Props) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+export const DeleteProductButton = ({onClick, isLoading} : Props) => {
 
   const handleClick = () => {
-    setIsLoading(true)
     onClick()
   }
 

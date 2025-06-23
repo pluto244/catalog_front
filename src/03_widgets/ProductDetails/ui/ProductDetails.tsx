@@ -18,7 +18,7 @@ export const ProductDetails = ({ product }: Props) => {
   const userId = useSelector((state: RootState) => state.session.userId);
   const userRole = useSelector((state: RootState) => state.session.role);
   const isOwner = product.ownerId === userId;
-  const { modalContent, modalType, openModal } = useModal();
+  const { isModalOpen, modalProps, openModal, navigateAndClose } = useModal();
   const isViewBlocked = !isOwner && (product.status === Status.ON_MODERATION || product.status === Status.MODERATION_DENIED);
 
   useEffect(() => {
@@ -28,7 +28,15 @@ export const ProductDetails = ({ product }: Props) => {
   }, [isViewBlocked, openModal]);
 
   if (isViewBlocked) {
-    return <Modal type={modalType}><h3>{modalContent}</h3></Modal>
+    return (
+        <Modal 
+            type={modalProps.type}
+            onClose={navigateAndClose}
+            buttonText={modalProps.buttonText}
+        >
+            <h3>{modalProps.content}</h3>
+        </Modal>
+    );
   }
 
   return (

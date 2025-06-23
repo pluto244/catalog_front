@@ -3,22 +3,21 @@ import cn from 'classnames'
 import css from './Modal.module.css'
 import { ReactNode, useEffect } from 'react'
 import { Button } from '../Button/Button'
-import { useModal } from '@/06_shared/lib/useModal'
 
 const modalRoot = document.getElementById('modal')!
 
 type Props = {
   type: 'success' | 'error' | null,
-  children: ReactNode
+  children: ReactNode,
+  onClose: () => void,
+  buttonText?: string
 }
 
-export function Modal ({type, children} : Props) {
-  const { closeModal } = useModal();
-
+export function Modal ({type, children, onClose, buttonText = 'Главный экран'} : Props) {
   useEffect(() => {
     const onESCpress = (event:KeyboardEvent) => {
       if (event.key === 'Escape') {
-        closeModal()
+        onClose()
       }
     }
   
@@ -27,11 +26,11 @@ export function Modal ({type, children} : Props) {
     return () => {
       document.removeEventListener('keydown', onESCpress)
     }
-  }, [closeModal]);
+  }, [onClose]);
 
   const onOverlayClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
-      closeModal()
+      onClose()
     }
   };
 
@@ -43,8 +42,8 @@ export function Modal ({type, children} : Props) {
           type === 'success' ? css.modal_success : css.modal_error
         )}>
           {children}
-          <Button onClick={closeModal}>
-            Главный экран
+          <Button onClick={onClose}>
+            {buttonText}
           </Button>
         </div>
       </div>
