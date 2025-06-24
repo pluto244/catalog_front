@@ -19,7 +19,8 @@ export const ProductDetails = ({ product }: Props) => {
   const userRole = useSelector((state: RootState) => state.session.role);
   const isOwner = product.ownerId === userId;
   const { isModalOpen, modalProps, openModal, navigateAndClose } = useModal();
-  const isViewBlocked = !isOwner && (product.status === Status.ON_MODERATION || product.status === Status.MODERATION_DENIED);
+  const isAdmin = userRole === Roles.ROLE_ADMIN;
+  const isViewBlocked = !isOwner && !isAdmin && (product.status === Status.ON_MODERATION || product.status === Status.MODERATION_DENIED);
 
   useEffect(() => {
     if (isViewBlocked) {

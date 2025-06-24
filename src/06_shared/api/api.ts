@@ -30,7 +30,7 @@ export type ProductPreviewCardDto = {
 }
 
 export type IdsOfFollowedProductsDto = {
-    productIds: number[];
+    idsOfFollowedProducts: number[];
 }
 
 export type NotificationResponse = {
@@ -67,7 +67,7 @@ export type EditProductBodyRequest = {
 
 export const api = createApi({
     reducerPath: 'api',
-    tagTypes: ['FollowedProducts', 'Products'],
+    tagTypes: ['FollowedProducts', 'Products', 'Notifications'],
     baseQuery: fetchBaseQuery({
         baseUrl: '/api',
     }),
@@ -163,16 +163,26 @@ export const api = createApi({
             }),
             invalidatesTags: [{ type: 'Products', id: 'LIST' }],
         }),
+        getModerationProducts: builder.query<ProductPreviewCardDto[], void>({
+            query: () => 'products/moderator/all',
+            providesTags: (result) =>
+            result
+                ? [
+                      ...result.map(({ id }) => ({ type: 'Products' as const, id })),
+                      { type: 'Products', id: 'LIST' },
+                  ]
+                : [{ type: 'Products', id: 'LIST' }],
+        }),
         approveProduct: builder.mutation<ProductDto, number>({
             query: (id) => ({
-                url: `/products/approve/${id}`,
+                url: `/products/approve_of_publishing_or_editing/${id}`,
                 method: 'POST',
             }),
             invalidatesTags: (result, error, id) => [{ type: 'Products', id }, { type: 'Products', id: 'LIST' }],
         }),
         rejectProduct: builder.mutation<ProductDto, { id: number; reason: string }>({
             query: ({ id, reason }) => ({
-                url: `/products/reject/${id}`,
+                url: `/products/decline_of_moderation/${id}`,
                 method: 'POST',
                 body: { reason },
             }),
@@ -186,7 +196,7 @@ export const api = createApi({
             async onQueryStarted(_, { dispatch, queryFulfilled }) {
                 try {
                     const { data } = await queryFulfilled;
-                    dispatch(updateFollowedIds(data.productIds));
+                    dispatch(updateFollowedIds(data.idsOfFollowedProducts));
                 } catch (error) {
                     console.error('Failed to subscribe', error);
                 }
@@ -200,7 +210,7 @@ export const api = createApi({
             async onQueryStarted(_, { dispatch, queryFulfilled }) {
                 try {
                     const { data } = await queryFulfilled;
-                    dispatch(updateFollowedIds(data.productIds));
+                    dispatch(updateFollowedIds(data.idsOfFollowedProducts));
                 } catch (error) {
                     console.error('Failed to unsubscribe', error);
                 }
@@ -237,6 +247,20 @@ export const api = createApi({
         }),
         getNotifications: builder.query<NotificationDto[], number>({
             query: (userId) => `/notifications/user/${userId}`,
+            providesTags: (result) =>
+                result
+                    ? [
+                          ...result.map(({ id }) => ({ type: 'Notifications' as const, id })),
+                          { type: 'Notifications', id: 'LIST' },
+                      ]
+                    : [{ type: 'Notifications', id: 'LIST' }],
+        }),
+        deleteNotification: builder.mutation<void, number>({
+            query: (id) => ({
+                url: `/notifications/delete/${id}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: [{ type: 'Notifications', id: 'LIST' }],
         }),
     }),
 });
@@ -260,6 +284,7 @@ export const {
     useArchiveProductMutation,
     useUnarchiveProductMutation,
     useDeleteProductMutation,
+    useGetModerationProductsQuery,
     useApproveProductMutation,
     useRejectProductMutation,
     useSubscribeToProductMutation,
@@ -271,5 +296,6 @@ export const {
     useEditUserMutation,
     useDeleteUserMutation,
     useAddUserMutation,
-    useGetNotificationsQuery,  
+    useGetNotificationsQuery,
+    useDeleteNotificationMutation,
 } = api;

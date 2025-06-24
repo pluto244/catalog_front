@@ -16,10 +16,25 @@
 .right {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     color: var(--color-black);
     gap: 12px;
 }
 
+.user_block {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logoutButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
 
 .icon{
     width: 26px;

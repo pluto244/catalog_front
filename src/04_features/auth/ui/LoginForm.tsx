@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '@/06_shared/model/hooks';
 import { setSession } from '@/05_entities/session/sessionSlice';
 import { useLoginMutation } from '@/06_shared/api/api';
+import { useEffect } from 'react';
 
 type FormFields = {
   email: string
@@ -22,9 +23,19 @@ export function LoginForm() {
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
+    watch,
+    trigger,
   } = useForm<FormFields>({
-    mode: 'onBlur'
+    mode: 'onChange'
   });
+
+  const email = watch('email');
+  const password = watch('password');
+
+  useEffect(() => {
+    trigger('email');
+    trigger('password');
+  }, [email, password, trigger]);
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {

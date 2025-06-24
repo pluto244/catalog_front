@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/01_app/AppStore';
 import { AddToWishlistIcon } from '@/04_features/wishlist/addToWishlist/ui/AddToWishlistIcon/AddToWishlistIcon';
@@ -10,19 +10,39 @@ import { NotificationList } from '@/03_widgets/NotificationList/ui/NotificationL
 import { Loader } from '@/06_shared/ui/Loader/Loader';
 import { NotificationDto } from '@/05_entities/notification/model/types';
 import { useProfileCategoryData } from './module/useProfileCategoryData';
+import css from './ProfileCategory.module.css';
 
-export const ProfileCategory: React.FC = () => {
+const Products = ({ products, notifications, category }: { products: ProductPreviewCardDto[], notifications: NotificationDto[], category: ProductCategory }) => {
+    if (category === ProductCategory.Notifications) {
+        return <NotificationList notifications={notifications} />;
+    }
+    return (
+        <ProductCardList
+            products={products}
+            productCardActionsSlot={(productId: number) => <AddToWishlistIcon productId={productId} />}
+        />
+    );
+};
+
+export const ProfileCategory = () => {
     const { id: profileId } = useParams<{ id: string }>();
-    const currentUserId = useSelector((state: RootState) => state.session.userId);
     const parsedProfileId = profileId ? parseInt(profileId, 10) : null;
+    const currentUserId = useSelector((state: RootState) => state.session.userId);
 
-    const isOwnProfile = currentUserId === parsedProfileId;
+    const isMyProfile = parsedProfileId === currentUserId;
 
-    const categoriesToShow = [
-        ProductCategory.UserProducts,
-        ...(isOwnProfile ? [ProductCategory.Favorites, ProductCategory.ToDo, ProductCategory.Notifications] : []),
-        ProductCategory.Archive,
-    ];
+    const categoriesToShow = useMemo(() => {
+        if (isMyProfile) {
+            return [
+                ProductCategory.UserProducts,
+                ProductCategory.Favorites,
+                ProductCategory.ToDo,
+                ProductCategory.Notifications,
+                ProductCategory.Archive,
+            ];
+        }
+        return [ProductCategory.UserProducts, ProductCategory.Archive];
+    }, [isMyProfile]);
 
     const [currentCategory, setCurrentCategory] = useState<ProductCategory>(categoriesToShow[0]);
 
@@ -40,6 +60,9 @@ export const ProfileCategory: React.FC = () => {
         }
     };
 
+    const isNotifications = currentCategory === ProductCategory.Notifications;
+    const isEmpty = isNotifications ? notificationResults.length === 0 : productResults.length === 0;
+
     return (
         <>
             <ProductFilterButtonsProfile
@@ -47,32 +70,19 @@ export const ProfileCategory: React.FC = () => {
                 categories={categoriesToShow}
                 onCategoryChange={handleCategoryChange}
             />
-            {isLoading ? <Loader/> :
-                <Products
-                    currentCategory={currentCategory}
-                    productResults={productResults}
-                    notificationResults={notificationResults}
-                />
-            }
+            {isLoading ? (
+                <Loader />
+            ) : (
+                isEmpty ? (
+                    <div className={css.emptyMessage}>Тут пока ничего нет</div>
+                ) : (
+                    <Products
+                        products={productResults}
+                        notifications={notificationResults}
+                        category={currentCategory}
+                    />
+                )
+            )}
         </>
-    );
-};
-
-interface ProductsProps {
-    currentCategory: ProductCategory;
-    productResults: ProductPreviewCardDto[];
-    notificationResults: NotificationDto[];
-}
-
-const Products: React.FC<ProductsProps> = ({ currentCategory, productResults, notificationResults }) => {
-    if (currentCategory === ProductCategory.Notifications) {
-        return <NotificationList notifications={notificationResults} />;
-    }
-    
-    return (
-        <ProductCardList
-            products={productResults}
-            productCardActionsSlot={(productId: number) => <AddToWishlistIcon productId={productId} />}
-        />
     );
 };

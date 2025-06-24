@@ -1,0 +1,44 @@
+.deleteButton {
+    position: absolute;
+    top: 5px;
+    right: 5px; 
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.deleteButton:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.deleteIcon {
+    width: 16px;
+    height: 16px;
+    color: var(--color-gray);
+}
+
+.deleteIcon:hover {
+    color: var(--color-black);
+}
+
+.loader {
+    animation: rotating 2s linear infinite;
+    height: 18px;
+    width: 18px;
+}
+
+@keyframes rotating {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+} 

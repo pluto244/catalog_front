@@ -10,7 +10,8 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { Loader } from '@/06_shared/ui/Loader/Loader'
-import { useAddProductMutation, useDeleteProductMutation, useEditProductMutation, useGetProductByIdQuery } from '@/06_shared/api/api'
+import { useAddProductMutation, useDeleteProductMutation, useEditProductMutation, useGetProductByIdQuery, useUnarchiveProductMutation } from '@/06_shared/api/api'
+import { Status } from '@/05_entities/product/model/types'
 
 export type TCreateProductForm = {
   title: string
@@ -34,7 +35,7 @@ type Props = {
 }
 
 export const CreateProductForm = ({productId, formMode} : Props) => {
-  const { isModalOpen, modalProps, openModal, navigateAndClose } = useModal();
+  const { isModalOpen, modalProps, openModal, closeModal, navigateAndClose } = useModal();
   const numericId = Number(productId);
   const [ownerId, setOwnerId] = useState<number | null>(null);
   const userId = useSelector((state: RootState) => state.session.userId);
@@ -43,6 +44,7 @@ export const CreateProductForm = ({productId, formMode} : Props) => {
   const [addProduct, { isLoading: isAdding }] = useAddProductMutation();
   const [editProduct, { isLoading: isEditing }] = useEditProductMutation();
   const [deleteProduct] = useDeleteProductMutation();
+  const [unarchiveProduct] = useUnarchiveProductMutation();
 
   const { data: productData, isLoading: isProductLoading } = useGetProductByIdQuery(numericId, {
     skip: !productId,
@@ -90,9 +92,9 @@ export const CreateProductForm = ({productId, formMode} : Props) => {
 
     try {
       if (formMode === 'edit' && productId) {
-        if (!isDirty) {
-          openModal('Вы не внесли никаких изменений', 'error');
-          return;
+
+        if (productData?.status === Status.ARCHIVED) {
+          await unarchiveProduct(numericId).unwrap();
         }
         await editProduct({ id: numericId, ...requestBody }).unwrap();
         openModal('Продукт успешно отредактирован', 'success');
@@ -118,6 +120,14 @@ export const CreateProductForm = ({productId, formMode} : Props) => {
   }
 
   const isLoading = isAdding || isEditing;
+
+  const handleModalClose = () => {
+    if (modalProps.type === 'success') {
+      navigate('/');
+    } else {
+      closeModal();
+    }
+  };
 
   return (
     <div className={css.pageContainer}>
@@ -180,7 +190,7 @@ export const CreateProductForm = ({productId, formMode} : Props) => {
         {isModalOpen && (
             <Modal 
                 type={modalProps.type}
-                onClose={() => navigateAndClose()}
+                onClose={handleModalClose}
                 buttonText={modalProps.buttonText}
             >
                 <h3>{modalProps.content}</h3>

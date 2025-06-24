@@ -25,6 +25,7 @@ export enum Status {
 export enum ProductMainPageCategory {
     All = 'Все',
     Favorites = 'Отслеживаемые',
+    Moderation = 'На модерации',
 }
 export enum ProductCategory {
     Favorites = 'Отслеживаемые',

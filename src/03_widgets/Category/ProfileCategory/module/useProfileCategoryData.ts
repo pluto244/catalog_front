@@ -25,7 +25,7 @@ export const useProfileCategoryData = (
     );
     const favoriteProductsQuery = useGetFollowedProductsQuery(
         currentUserId!,
-        { skip: currentCategory !== ProductCategory.Favorites || !currentUserId }
+        { skip: currentCategory !== ProductCategory.Favorites || !currentUserId || profileId !== currentUserId }
     );
     const notificationsQuery = useGetNotificationsQuery(
         currentUserId!,

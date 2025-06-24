@@ -20,17 +20,18 @@ export function ProductCardList(props: ProductCardListType) {
     const { products, productCardActionsSlot } = props
     const userId = useSelector((state: RootState) => state.session.userId);
     const userRole = useSelector((state: RootState) => state.session.role);
+    const isAdmin = userRole === Roles.ROLE_ADMIN;
 
     const getActionSlot = useCallback(
         (product: ProductPreviewCardDto) => {
             if (productCardActionsSlot) {
-                if ((userId !== product.ownerId) && (userRole === Roles.ROLE_USER)) {
+                if (((userId !== product.ownerId) || (isAdmin)) && (userRole === Roles.ROLE_USER)) {
                     return productCardActionsSlot(product.id);
                 }
             }
             return null;
         },
-        [productCardActionsSlot, userId, userRole]
+        [productCardActionsSlot, userId, userRole, isAdmin]
     );
 
     const getInfoSlot = useCallback(
